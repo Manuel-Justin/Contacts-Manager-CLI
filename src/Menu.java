@@ -34,26 +34,32 @@ public class Menu {
             int input = scanner.nextInt();
 
             switch (input) {
-                case 1:
+                case 1: {
                     allContacts();
                     break;
-                case 2:
+                }
+                case 2: {
                     addContact();
                     break;
-                case 3:
+                }
+                case 3: {
                     search();
                     break;
-                case 4:
+                }
+                case 4: {
                     delete();
                     break;
-                case 5:
+                }
+                case 5: {
                     System.out.println("Exiting. Saving contacts.txt");
                     exit();
                     loop = false;
                     break;
-                default:
+                }
+                default: {
                     System.out.println("bad input try again");
                     menu();
+                }
             }
         }
     }
@@ -78,7 +84,32 @@ public class Menu {
             for (int i = 0; i < contats.size(); i += 1) {
                 String[] contactLine = contats.get(i).split(" ");
                 String name = contactLine[0];
+                name = name.replace("_"," ");
                 String phoneNumber = contactLine[1];
+                StringBuilder sb = new StringBuilder(phoneNumber);
+
+                int j = 0;
+                for (int o = sb.length() - 1; o >= 0; o--) {
+                    j++;
+                    if (j == 4) {
+                        sb.insert(o, '-');
+                    }
+                    if (phoneNumber.length() >= 10) {
+                        if (j == 7) {
+                            sb.insert(o, ")-");
+                        }
+                        if (j == 10) {
+                            sb.insert(o, '(');
+                        }
+                    }
+                    if (phoneNumber.length() >= 11) {
+                        if (j == 11) {
+                            sb.insert(o+1, "-");
+                        }
+                    }
+                }
+
+                phoneNumber = sb.toString();
                 System.out.printf("%s.  %-10s |  %s\n", i + 1, name, phoneNumber);
             }
         }
@@ -86,10 +117,30 @@ public class Menu {
 
     public static void addContact() {
         System.out.println("Enter contact's name:");
-        String name = scanner.next();
-        System.out.println("Enter contact's number:");
-        String number = scanner.next();
-        contats.add(name + " " + number);
+        scanner.nextLine();
+        String name = scanner.nextLine();
+        String fullName= name.replace(" ","_");
+
+        boolean done = false;
+        for(String contact: contats){
+            if(contact.toLowerCase().contains(name.toLowerCase())){
+                System.out.printf("%s already exists, would you like to overwrite? Y/N", name);
+                String yn= scanner.next();
+                if(yn.equalsIgnoreCase("y")){
+                    System.out.println("Enter contact's number:");
+                    String number = scanner.next();
+                    contats.set(contats.indexOf(contact), fullName + " " + number);
+                    done=true;
+                } else{
+                    addContact();
+                }
+            }
+        }
+        if(!done){
+            System.out.println("Enter contact's number: ");
+            String number = scanner.next();
+            contats.add(fullName + " " + number);
+        }
     }
 
     public static void search() {
