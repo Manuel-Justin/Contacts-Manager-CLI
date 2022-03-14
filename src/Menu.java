@@ -130,12 +130,13 @@ public class Menu {
                     System.out.println("Enter contact's number:");
                     String number = scanner.next();
                     contats.set(contats.indexOf(contact), fullName + " " + number);
-                    done=true;
-                } else{
-                    menu();
+                    done = true;
+                } else {
+                    return;
                 }
             }
         }
+
         if(!done){
             System.out.println("Enter contact's number: ");
             String number = scanner.next();
