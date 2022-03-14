@@ -115,7 +115,7 @@ public class Menu {
         }
     }
 
-    public static void addContact() {
+    public static void addContact() throws IOException{
         System.out.println("Enter contact's name:");
         scanner.nextLine();
         String name = scanner.nextLine();
@@ -132,7 +132,7 @@ public class Menu {
                     contats.set(contats.indexOf(contact), fullName + " " + number);
                     done=true;
                 } else{
-                    addContact();
+                    menu();
                 }
             }
         }
